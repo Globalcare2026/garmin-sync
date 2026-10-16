@@ -194,25 +194,63 @@ def pull_activities(api, days):
     write_csv("activities", rows, list(rows[0].keys()) if rows else [])
 
 
+def _vo2_from(obj):
+    """Extract (running, cycling, fitnessAge) from a Garmin metrics payload of unknown shape."""
+    if isinstance(obj, list):
+        for item in obj:
+            r = _vo2_from(item)
+            if r[0] or r[1]:
+                return r
+        return (None, None, None)
+    if not isinstance(obj, dict):
+        return (None, None, None)
+    if "mostRecentVO2Max" in obj:
+        obj = obj.get("mostRecentVO2Max") or {}
+    gen = obj.get("generic") or {}
+    cyc = obj.get("cycling") or {}
+    run = gen.get("vo2MaxPreciseValue") or gen.get("vo2MaxValue")
+    bike = cyc.get("vo2MaxPreciseValue") or cyc.get("vo2MaxValue")
+    return (run, bike, gen.get("fitnessAge"))
+
+
 def pull_vo2(api):
-    """VO2max current + Max Metrics data."""
-    try:
-        mm = api.get_max_metrics(date.today().isoformat()) or []
-    except Exception as e:
-        print(f"  WARN vo2: {e}", file=sys.stderr)
+    """VO2max: tries max metrics, then training status, then latest run activity."""
+    today = date.today().isoformat()
+    run = bike = fitness_age = None
+    source = None
+    for name, call in (
+        ("max_metrics", lambda: api.get_max_metrics(today)),
+        ("training_status", lambda: api.get_training_status(today)),
+    ):
+        try:
+            payload = call()
+        except Exception as e:
+            print(f"  WARN vo2 {name}: {e}", file=sys.stderr)
+            continue
+        r, b, fa = _vo2_from(payload)
+        if r or b:
+            run, bike, fitness_age, source = r, b, fa, name
+            break
+    if not (run or bike):
+        try:
+            acts = api.get_activities(0, 20) or []
+            for a in acts:
+                if a.get("vO2MaxValue"):
+                    run, source = a.get("vO2MaxValue"), "latest_activity"
+                    break
+        except Exception as e:
+            print(f"  WARN vo2 activities: {e}", file=sys.stderr)
+    if not (run or bike):
+        print("  SKIP vo2max: no value found")
         return
-    rows = []
-    for entry in (mm if isinstance(mm, list) else [mm]):
-        gen = entry.get("generic") or {}
-        cyc = entry.get("cycling") or {}
-        rows.append({
-            "date": date.today().isoformat(),
-            "vo2MaxRunning": gen.get("vo2MaxValue"),
-            "vo2MaxCycling": cyc.get("vo2MaxValue"),
-            "fitnessAge": gen.get("fitnessAge"),
-            "heatAltitudeAcclimation": gen.get("heatAltitudeAcclimationDate"),
-        })
-    write_csv("vo2max", rows, list(rows[0].keys()) if rows else [])
+    rows = [{
+        "date": today,
+        "vo2MaxRunning": run,
+        "vo2MaxCycling": bike,
+        "fitnessAge": fitness_age,
+        "source": source,
+    }]
+    write_csv("vo2max", rows, list(rows[0].keys()))
 
 
 def pull_race_predictions(api):
