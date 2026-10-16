@@ -2,9 +2,12 @@ name: Daily Garmin Sync
 
 on:
   schedule:
-    # 06:15 UTC = 08:15 Europe/Amsterdam (summer) / 07:15 (winter)
+    # 06:15 UTC = 08:15 Amsterdam (Sommer) / 07:15 (Winter)
     - cron: '15 6 * * *'
-  workflow_dispatch:  # manual trigger via GitHub UI
+  workflow_dispatch:  # manueller Start über den Actions-Tab
+
+permissions:
+  contents: write
 
 jobs:
   sync:
@@ -28,7 +31,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .garmin_tokens
-          key: garmin-tokens-${{ secrets.GARMIN_EMAIL }}
+          key: garmin-tokens-v1
 
       - name: Run Garmin sync
         env:
@@ -37,24 +40,14 @@ jobs:
           DAYS_BACK: 14
         run: python sync.py
 
-      - name: Install rclone
-        run: |
-          curl https://rclone.org/install.sh | sudo bash
-
-      - name: Configure rclone
-        env:
-          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-        run: |
-          mkdir -p ~/.config/rclone
-          echo "$RCLONE_CONFIG" > ~/.config/rclone/rclone.conf
-          chmod 600 ~/.config/rclone/rclone.conf
-
-      - name: Upload CSVs to OneDrive
-        run: |
-          rclone copy out/ onedrive:Gesundheit/Garmin/ --progress --stats-one-line
-          rclone copy out/_meta.json onedrive:Gesundheit/Garmin/
-
-      - name: Archive timestamped snapshot
+      - name: Save data to repo
         run: |
           DATE=$(date -u +%Y-%m-%d)
-          rclone copy out/ "onedrive:Gesundheit/Garmin/archive/$DATE/" --progress
+          mkdir -p data/latest "data/archive/$DATE"
+          cp out/* data/latest/
+          cp out/* "data/archive/$DATE/"
+          git config user.name "garmin-sync-bot"
+          git config user.email "garmin-sync-bot@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Garmin data $DATE"
+          git push
