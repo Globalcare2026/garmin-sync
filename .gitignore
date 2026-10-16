@@ -1,0 +1,9 @@
+out/
+.garmin_tokens/
+.garmin_tokens
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+rclone.conf

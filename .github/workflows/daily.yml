@@ -1,0 +1,60 @@
+name: Daily Garmin Sync
+
+on:
+  schedule:
+    # 06:15 UTC = 08:15 Europe/Amsterdam (summer) / 07:15 (winter)
+    - cron: '15 6 * * *'
+  workflow_dispatch:  # manual trigger via GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: garmin-sync
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore Garmin tokens
+        uses: actions/cache@v4
+        with:
+          path: .garmin_tokens
+          key: garmin-tokens-${{ secrets.GARMIN_EMAIL }}
+
+      - name: Run Garmin sync
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+          DAYS_BACK: 14
+        run: python sync.py
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Configure rclone
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "$RCLONE_CONFIG" > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+
+      - name: Upload CSVs to OneDrive
+        run: |
+          rclone copy out/ onedrive:Gesundheit/Garmin/ --progress --stats-one-line
+          rclone copy out/_meta.json onedrive:Gesundheit/Garmin/
+
+      - name: Archive timestamped snapshot
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          rclone copy out/ "onedrive:Gesundheit/Garmin/archive/$DATE/" --progress
