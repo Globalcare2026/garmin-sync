@@ -1,6 +1,6 @@
 # Garmin Sync
 
-Automatischer täglicher Export von Garmin Connect Daten nach OneDrive via GitHub Actions.
+Automatischer täglicher Export von Garmin Connect Daten ins Repo via GitHub Actions.
 
 ## Was wird gezogen
 
@@ -52,4 +52,4 @@ Claude liest die CSVs direkt aus diesem Repo und frischt das Dashboard auf Zuruf
 ## Troubleshooting
 
 - **Token expired**: GitHub Actions Cache löschen (Settings -> Caches), neuer Run holt frische Tokens
-- **MFA Fehler**: siehe Option A/B oben
+- **MFA Fehler**: 2FA kurz deaktivieren, siehe Setup Schritt 2
