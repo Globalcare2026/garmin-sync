@@ -1,4 +1,5 @@
 date,restingHR,steps,calories,activeCalories,intensityMinutes,floorsClimbed,stressAvg,bodyBatteryHighest,bodyBatteryLowest,spo2Avg
+2026-10-18,,,,,0,,,,,
 2026-10-17,,,,,0,,,,,
 2026-10-16,52,1461,1758.0,77.0,0,10.53182,15,93,34,97.0
 2026-10-15,52,5283,2880.0,565.0,86,24.16339,16,100,25,98.0
@@ -12,4 +13,3 @@ date,restingHR,steps,calories,activeCalories,intensityMinutes,floorsClimbed,stre
 2026-10-07,56,4148,2479.0,164.0,4,25.69652,23,75,17,98.0
 2026-10-06,52,10307,2980.0,665.0,73,54.0,18,96,32,98.0
 2026-10-05,53,6493,2596.0,281.0,41,27.02887,21,56,22,99.0
-2026-10-04,54,16568,3175.0,860.0,87,82.47736,29,92,19,98.0
