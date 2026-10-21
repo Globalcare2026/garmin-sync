@@ -2,8 +2,9 @@ name: Daily Garmin Sync
 
 on:
   schedule:
-    # 06:15 UTC = 08:15 Amsterdam (Sommer) / 07:15 (Winter)
-    - cron: '15 6 * * *'
+    # 03:07 UTC. GitHub startet geplante Läufe oft mit mehreren Stunden Verzögerung,
+    # deshalb früh angesetzt. Das Dashboard-Update läuft erst nachmittags.
+    - cron: '7 3 * * *'
   workflow_dispatch:  # manueller Start über den Actions-Tab
 
 permissions:

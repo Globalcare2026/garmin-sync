@@ -33,7 +33,7 @@ Bei aktiver Garmin-2FA bricht der erste Login ab: 2FA kurz deaktivieren, einmal 
 
 ### 3. Fertig
 
-Läuft täglich um 08:15 (Amsterdam). Die Daten liegen im Repo unter `data/latest/` plus täglichem Snapshot unter `data/archive/YYYY-MM-DD/`.
+Läuft täglich ab ca. 05:00 (Amsterdam), GitHub startet oft mit einigen Stunden Verzögerung. Die Daten liegen im Repo unter `data/latest/` plus täglichem Snapshot unter `data/archive/YYYY-MM-DD/`.
 
 ## Lokal testen
 
