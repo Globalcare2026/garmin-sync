@@ -47,6 +47,7 @@ jobs:
           mkdir -p data/latest "data/archive/$DATE"
           cp out/* data/latest/
           cp out/* "data/archive/$DATE/"
+          python merge_history.py
           git config user.name "garmin-sync-bot"
           git config user.email "garmin-sync-bot@users.noreply.github.com"
           git add data/
