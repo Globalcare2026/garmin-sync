@@ -164,10 +164,10 @@ def pull_daily(api, days):
     write_csv("training_readiness", readiness_rows, list(readiness_rows[0].keys()) if readiness_rows else [])
 
 
-def pull_activities(api, days):
-    """Pull activities from the last N days."""
+def pull_activities(api, days, start=None, name="activities"):
+    """Pull activities from the last N days (or from a fixed start date)."""
     today = date.today()
-    start = today - timedelta(days=days)
+    start = start or (today - timedelta(days=days))
     try:
         acts = api.get_activities_by_date(start.isoformat(), today.isoformat()) or []
     except Exception as e:
@@ -191,7 +191,7 @@ def pull_activities(api, days):
             "vo2Max": a.get("vO2MaxValue"),
         })
     rows.sort(key=lambda r: r["startTime"] or "")
-    write_csv("activities", rows, list(rows[0].keys()) if rows else [])
+    write_csv(name, rows, list(rows[0].keys()) if rows else [])
 
 
 def _vo2_from(obj):
@@ -272,6 +272,12 @@ def pull_race_predictions(api):
 
 
 def main():
+    history_from = os.environ.get("HISTORY_FROM")
+    if history_from:
+        print(f"=== Garmin history: activities since {history_from} ===")
+        api = login()
+        pull_activities(api, 0, start=date.fromisoformat(history_from), name="activities_history")
+        return
     print(f"=== Garmin sync: {date.today()}, {DAYS_BACK} days back ===")
     api = login()
     print("\n-- Daily summaries, sleep, HRV, readiness --")

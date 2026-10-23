@@ -1,0 +1,47 @@
+name: Garmin History (einmalig)
+
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: 'Startdatum YYYY-MM-DD'
+        required: true
+        default: '2021-07-01'
+
+permissions:
+  contents: write
+
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: garmin-sync
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - name: Restore Garmin tokens
+        uses: actions/cache@v4
+        with:
+          path: .garmin_tokens
+          key: garmin-tokens-v1
+      - name: Pull activity history
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+          HISTORY_FROM: ${{ github.event.inputs.from }}
+        run: python sync.py
+      - name: Save history to repo
+        run: |
+          mkdir -p data/history
+          cp out/activities_history.csv data/history/
+          git config user.name "garmin-sync-bot"
+          git config user.email "garmin-sync-bot@users.noreply.github.com"
+          git add data/history/
+          git diff --cached --quiet || git commit -m "Garmin activity history since ${{ github.event.inputs.from }}"
+          git pull --rebase
+          git push
