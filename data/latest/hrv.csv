@@ -1,4 +1,5 @@
 date,lastNightAvg,lastNight5MinHigh,weeklyAvg,baselineLow,baselineBalanced,status
+2026-10-25,37,72,39,36,40,UNBALANCED
 2026-10-24,45,69,38,36,39,UNBALANCED
 2026-10-23,38,69,38,36,39,UNBALANCED
 2026-10-22,43,72,39,36,39,BALANCED
@@ -12,4 +13,3 @@ date,lastNightAvg,lastNight5MinHigh,weeklyAvg,baselineLow,baselineBalanced,statu
 2026-10-14,44,67,38,37,39,UNBALANCED
 2026-10-13,48,85,37,37,40,LOW
 2026-10-12,47,87,36,37,40,LOW
-2026-10-11,25,40,35,37,40,LOW
