@@ -1,4 +1,5 @@
 date,totalHours,deepHours,lightHours,remHours,awakeHours,overallScore,qualityScore,durationScore,avgSleepStress,averageRespiration
+2026-11-13,3.72,0.52,3.2,0.0,1.23,32,,,45.0,16.0
 2026-11-12,5.47,0.75,3.97,0.75,0.18,71,,,25.0,13.0
 2026-11-11,6.93,1.25,4.92,0.77,0.23,80,,,18.0,14.0
 2026-11-10,7.17,0.93,4.47,1.77,0.05,94,,,10.0,13.0
@@ -12,4 +13,3 @@ date,totalHours,deepHours,lightHours,remHours,awakeHours,overallScore,qualitySco
 2026-11-02,6.07,1.58,4.08,0.4,0.4,69,,,15.0,14.0
 2026-11-01,6.03,0.45,4.85,0.73,1.07,67,,,25.0,15.0
 2026-10-31,6.03,1.42,4.03,0.58,0.2,72,,,24.0,15.0
-2026-10-30,6.8,0.98,4.15,1.67,0.12,91,,,10.0,14.0
