@@ -1,4 +1,5 @@
 date,lastNightAvg,lastNight5MinHigh,weeklyAvg,baselineLow,baselineBalanced,status
+2026-11-14,,,,,,
 2026-11-13,33,43,42,35,38,BALANCED
 2026-11-12,47,78,45,35,38,BALANCED
 2026-11-11,55,87,46,35,38,BALANCED
@@ -12,4 +13,3 @@ date,lastNightAvg,lastNight5MinHigh,weeklyAvg,baselineLow,baselineBalanced,statu
 2026-11-03,68,118,46,35,38,BALANCED
 2026-11-02,46,81,43,35,38,BALANCED
 2026-11-01,36,66,43,35,38,BALANCED
-2026-10-31,32,49,43,35,38,BALANCED
