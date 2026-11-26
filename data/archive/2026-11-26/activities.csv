@@ -1,0 +1,2 @@
+activityId,startTime,name,type,durationSec,distanceM,avgHR,maxHR,calories,aerobicTE,anaerobicTE,activityTrainingLoad,vo2Max
+25144724159,2026-11-20 19:10:37,HIIT,hiit,5313.5380859375,0.0,128.0,181.0,727.0,3.799999952316284,2.700000047683716,173.53469848632812,
