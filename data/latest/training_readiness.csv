@@ -1,4 +1,5 @@
 date,score,level,sleepScore,sleepHistoryFactor,recoveryTime,acuteLoad,hrvWeeklyAverage,stressHistoryFactor
+2026-11-28,86,HIGH,84,GOOD,0,44,45,POOR
 2026-11-27,80,HIGH,82,GOOD,0,66,44,MODERATE
 2026-11-26,82,HIGH,78,VERY_GOOD,0,88,44,MODERATE
 2026-11-25,95,PRIME,94,GOOD,0,110,47,MODERATE
@@ -12,4 +13,3 @@ date,score,level,sleepScore,sleepHistoryFactor,recoveryTime,acuteLoad,hrvWeeklyA
 2026-11-17,65,MODERATE,75,MODERATE,1,22,40,GOOD
 2026-11-16,61,MODERATE,75,POOR,1,34,41,MODERATE
 2026-11-15,20,POOR,37,POOR,1,51,40,POOR
-2026-11-14,27,LOW,45,POOR,217,67,40,POOR
